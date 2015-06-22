@@ -8,7 +8,7 @@ exports.handler = function (event, context) {
 
     var actions = {
         submitJob: function () {
-            return qWorker.submitJob(event.workers);
+            return qWorker.submitJob(event);
         },
         getJobStatus: function (event) {
             return qWorker.getExportSignedUrl(event.tasks);

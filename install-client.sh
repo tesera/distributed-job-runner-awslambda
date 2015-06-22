@@ -1,12 +1,18 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
+export instance_id=$(curl http://169.254.169.254/latest/meta-data/instance-id)
+
+yum update -y
+yum install gdal.x86_64 gdal-devel.x86_64 proj.x86_64 proj-devel.x86_64 proj-epsg.x86_64 proj-nad.x86_64 --enablerepo epel -y
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.25.4/install.sh | bash
-source ~/.nvm/nvm.sh
+
+export NVM_DIR="/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+source ~/.bashrc
 nvm install stable
 nvm use stable
 
-curl http://raw.github... > client.js
-
 npm install sqs-worker
+curl -o- https://raw.githubusercontent.com/tesera/queu2worker/client.js > client.js
 
-node ./client.js https://sqs.us-east-1.amazonaws.com/674223647607/test-mike
+node ./client.js https://sqs.us-east-1.amazonaws.com/674223647607/queue2worker

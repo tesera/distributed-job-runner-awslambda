@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 var SQSWorker = require('sqs-worker');
-var spawn = require('child-proccess').exec;
+var exec = require('child_process').exec;
 
 function start(queueUrl) {
     var options = { 
-        url: queueUrl
+        url: queueUrl,
+        region: 'us-east-1'
     };
 
     // - get task from queue
@@ -12,24 +13,21 @@ function start(queueUrl) {
     // - outcome ok
     // - get other task
     // - no task
-    // - terminate yourself i.e. aws ec2 terminate-instance -insstanceId $myinstanceid
+    // - terminate yourself if no other msgs present i.e. aws ec2 terminate-instances --instance-ids $instance_id
 
-    function worker(notifi, done) {
-        var message
-        try {
-            message = JSON.parse(notifi.Data)
-        } catch (err) {
-            throw err
-        }
-
-        exec(message,
+    function worker(cmd, done) {
+        var isKillMsg = /^aws ec2 terminate-instances/.test(cmd);
+        console.log(cmd);
+        exec(cmd,
           function (error, stdout, stderr) {
             console.log('stdout: ' + stdout);
             console.log('stderr: ' + stderr);
-            if (error !== null) {
+            if (error !== null || isKillMsg) {
                 console.log('exec error: ' + error);
+                if (isKillMsg) process.exit(0);
                 done(null, false);
             } else {
+                console.log('executed cmd ');
                 done(null, true);
             }
         });

@@ -19,7 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.1.35",
-    "libbase64": "^0.1.0",
-    "q": "^1.4.1"
+    "q": "^1.4.1",
+    "sqs-worker": "0.0.2"
   }
 }
