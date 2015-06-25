@@ -15,4 +15,4 @@ nvm use stable
 npm install sqs-worker
 curl -o- https://raw.githubusercontent.com/tesera/queue2worker-awslambda/master/client.js > client.js
 
-node ./client.js https://sqs.us-east-1.amazonaws.com/674223647607/queue2worker
+node ./client.js https://sqs.us-east-1.amazonaws.com/674223647607/queue2worker > /home/ec2-user/output.txt

@@ -20,14 +20,14 @@ function start(queueUrl) {
         console.log(cmd);
         exec(cmd,
           function (error, stdout, stderr) {
-            console.log('stdout: ' + stdout);
-            console.log('stderr: ' + stderr);
+            // console.log('stdout: ' + stdout);
+            // console.log('stderr: ' + stderr);
             if (error !== null || isKillMsg) {
                 console.log('exec error: ' + error);
                 if (isKillMsg) process.exit(0);
                 done(null, false);
             } else {
-                console.log('executed cmd ');
+                console.log('exec success ');
                 done(null, true);
             }
         });
