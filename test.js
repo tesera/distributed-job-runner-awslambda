@@ -8,19 +8,27 @@ var evt = {
     "workers": {
         "MinCount": "1",
         "MaxCount": "1",
-        "ImageId": "ami-57ba4d3c", //"ami-1ecae776",
-        "InstanceType": "m1.small",
+        "ImageId": "ami-1ecae776", 
+        "InstanceType": "t2.micro", 
         "IamInstanceProfile": {
-            "Arn" : "arn:aws:iam::674223647607:instance-profile/afgo.pgyi-ec2-role"
+            "Name" : "sqs-s3"
         },
-        "InstanceInitiatedShutdownBehavior": "stop",
+        "InstanceInitiatedShutdownBehavior": "terminate",
         "Monitoring":  {
             "Enabled": false
         },
-        "SecurityGroups":  [
-            "magdatest"
+        "Placement": {
+            "AvailabilityZone": 'us-east-1c'
+        },
+        "NetworkInterfaces": [
+            {
+                "SubnetId": 'subnet-ab4ed9c0',
+                "Groups": ['sg-f9ee019e'],
+                "DeviceIndex": 0,
+                "AssociatePublicIpAddress": true
+            }
         ],
-        "UserData": fs.readFileSync(path.resolve(__dirname, 'install-client.sh')).toString('utf8') //utf8
+        "UserData": fs.readFileSync(path.resolve(__dirname, 'install-client.sh')).toString('utf8')
     },
     "tasks": [
         "echo hey | output.txt",
@@ -42,7 +50,8 @@ lambda.handler(evt, context);
 
 
 
-//'#!/bin/bash
 //\nyum install gdal.x86_64 gdal-devel.x86_64 proj.x86_64 proj-devel.x86_64 proj-epsg.x86_64 proj-nad.x86_64 --enablerepo epel -y
 //\nsRscript -e \'install.packages(c(\"yaml\", \"sp\", \"rgdal\", \"raster\"), repos=\"http://cran.r-project.org\", lib=\"/usr/share/R/library\")\'
-//\nyum -y install node\n'
+//"Arn" : "arn:aws:iam::674223647607:instance-profile/sqs-s3"
+//sudo cat /var/log/cloud-init-output.log
+//aws sqs send-message --queue-url "https://sqs.us-east-1.amazonaws.com/674223647607/queue2worker --message-body "cat ls -al > /home/ec2-user/output.txt"
