@@ -4,7 +4,7 @@ var QWorker = require('./lib/worker');
 
 exports.handler = function (event, context) {
 
-    var qWorker = new QWorker();
+    var qWorker = new QWorker(event.queueUrl);
 
     var actions = {
         submitJob: function () {

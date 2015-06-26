@@ -18,18 +18,18 @@ var evt = {
             "Enabled": false
         },
         "Placement": {
-            "AvailabilityZone": 'us-east-1c'
+            "AvailabilityZone": "us-east-1c"
         },
         "NetworkInterfaces": [
             {
-                "SubnetId": 'subnet-ab4ed9c0',
-                "Groups": ['sg-f9ee019e'],
+                "SubnetId": "subnet-ab4ed9c0",
+                "Groups": ["sg-f9ee019e"],
                 "DeviceIndex": 0,
                 "AssociatePublicIpAddress": true
             }
         ],
-        "UserData": "" //fs.readFileSync(path.resolve(__dirname, 'install-client.sh')).toString('utf8')
-    }
+        "UserData": fs.readFileSync(path.resolve(__dirname, 'install-client.sh')).toString('utf8')
+    },
     "queueUrl": "https://sqs.us-east-1.amazonaws.com/674223647607/queue2worker"
 };
 
@@ -41,6 +41,3 @@ var context = {
 };
 
 lambda.handler(evt, context);
-
-//sudo cat /var/log/cloud-init-output.log
-//aws sqs send-message --queue-url "https://sqs.us-east-1.amazonaws.com/674223647607/queue2worker --message-body "cat ls -al > /home/ec2-user/output.txt"

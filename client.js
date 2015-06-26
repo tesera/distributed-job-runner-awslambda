@@ -25,7 +25,7 @@ function start(queueUrl) {
             if (error !== null || isKillMsg) {
                 console.log('exec error: ' + error);
                 if (isKillMsg) process.exit(0);
-                done(null, false);
+                done(null, true);
             } else {
                 console.log('exec success ');
                 done(null, true);
