@@ -2,7 +2,7 @@
 var SQSWorker = require('sqs-worker');
 var exec = require('child_process').exec;
 var aws = require('aws-sdk');
-var Q = require('q');
+//var Q = require('q');
 //require('daemon')();
 
 function start(queueUrl) {
