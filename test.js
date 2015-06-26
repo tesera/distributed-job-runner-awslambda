@@ -30,7 +30,7 @@ var evt = {
         ],
         "UserData": fs.readFileSync(path.resolve(__dirname, 'install-client.sh')).toString('utf8')
     },
-    "queueUrl": "https://sqs.us-east-1.amazonaws.com/674223647607/queue2worker"
+    "queueUrl": "https://sqs.us-east-1.amazonaws.com/674223647607/q2worker"
 };
 
 var context = {

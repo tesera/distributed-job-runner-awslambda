@@ -19,6 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.1.35",
+    "daemon": "^1.1.0",
     "q": "^1.4.1",
     "sqs-worker": "0.0.2"
   }
