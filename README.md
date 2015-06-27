@@ -13,11 +13,11 @@ require('node-env-file')('.env');
 var evt = {
     "action": "submitJob",
     "job": {
-        "bootstrap": process.env.q2w_bootstrap,
-        "runner": process.env.q2w_runner,
-        "tasks": process.env.q2w_tasks,
+        "bootstrap": process.env.q2w_bootstrap, // http url to dependency shell script
+        "runner": process.env.q2w_runner, // http url toscript to process your tasks
+        "tasks": process.env.q2w_tasks, // http url to csv runner args
         "workers": {
-            "count": 0,
+            "count": 3,
             "image": "ami-1ecae776",
             "type": "t2.micro"
         }
