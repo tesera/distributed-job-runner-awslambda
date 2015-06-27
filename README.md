@@ -1,4 +1,4 @@
-# queue2worker-awslambda
+# q2worker
 Simple AWS Lambda task runner.
 
 ````javascript
