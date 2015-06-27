@@ -1,7 +1,7 @@
 # queue2worker-awslambda
 Simple AWS Lambda task runner.
 
-````
+````javascript
 #!/usr/bin/env node
 
 /* jshint quotmark: false */
@@ -32,4 +32,16 @@ var context = {
 };
 
 lambda.handler(evt, context);
+````
+
+
+````shell
+sqs_url=https://sqs...
+ec2_security_group_id=
+ec2_subnet_id=
+ec2_iam_instance_profile=
+q2w_bootstrap=https://...
+q2w_runner=https://...
+q2w_tasks=https://...
+
 ````
