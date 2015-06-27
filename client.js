@@ -1,45 +1,64 @@
 #!/usr/bin/env node
+
+// usage: node ./client.js https://sqs.us-east-1.amazonaws.com/674223647607/q2worker
+
+'use strict';
 var SQSWorker = require('sqs-worker');
-var exec = require('child_process').exec;
-var aws = require('aws-sdk');
+var spawn = require('child_process').spawn;
+var loggly = require('loggly');
+
 require('daemon')();
 
-function start(queueUrl) {
-    var options = { 
-        url: queueUrl,
+var worker = process.env.instance_id || 'localhost';
+var taskQueueUrl = process.argv[2];
+
+var client = loggly.createClient({
+    token: '3c69f1b6-85f4-4940-b1f2-a00a6a1999b3',
+    subdomain: 'tesera',
+    tags: ['q2worker'],
+    json: true
+});
+
+function start(taskQueueUrl) {
+    var params = {
+        url: taskQueueUrl,
         region: 'us-east-1'
     };
-    var self = this;
-    self.s3 = new aws.S3({ params: { Bucket: '1604-tpi' } });
-    
-    // - get task from queue
-    // - run the task cmd as child_process
-    // - outcome ok
-    // - get other task
-    // - no task
-    // - todo terminate yourself if no other msgs present i.e. aws ec2 terminate-instances --instance-ids $instance_id
-    function worker(cmd, done) {
-        //var isKillMsg = /^aws ec2 terminate-instances/.test(cmd);
-        console.log('logs/' + cmd.replace(/\//g, ':') + '/log.txt');
-        exec(cmd,
-          function (error, stdout, stderr) {
 
-            if (error !== null) { //} || isKillMsg) {
-                console.log('exec error: ' + error);
-                self.s3.putObject({Key: 'logs/' + cmd.replace(/\//g, ':') + '/log.txt', Body: JSON.stringify(process.pid + ' ' + error), ContentType: 'application/json'}).send();
-                //if (isKillMsg) process.exit(0);
+    client.log('q2worker ' + worker + ' started');
 
-                done(null, true);
-            } else {
-                console.log('exec success ');
-                self.s3.putObject({Key: 'logs/' + cmd.replace(/\//g, ':') + '/log.txt', Body: JSON.stringify(process.pid + ' success'), ContentType: 'application/json'}).send();
-                done(null, true);
-            }
+    new SQSWorker(params, function worker(task, done) {
+        // var selfDestruct = /^aws ec2 terminate-instances/.test(task);
+
+        function log(tag, message){
+            client.log({
+                tag: tag,
+                worker: process.env.instance_id,
+                task: task,
+                payload: message.toString(),
+                datetime: new Date()
+            });
+        }
+
+        log('start', '');
+
+        var work = spawn('bash', ['./runner.sh', task]);
+
+        work.stdout.on('data', function (data) {
+            log('stdout', data);
         });
-    }
 
-    new SQSWorker(options, worker)
+        work.stderr.on('data', function (err) {
+            log('stderr', err);
+        });
 
-};
+        work.on('close', function (code) {
+            log('done', code);
+            done(null, !code);
+        });
+    });
+}
 
-start(process.argv[2]);
+client.log('q2worker ' + worker + ' listening on task queue ' + taskQueueUrl);
+
+start(taskQueueUrl);

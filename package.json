@@ -18,9 +18,14 @@
   "author": "Magda Kosior",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.1.35",
+    "aws-sdk": "^2.1.36",
     "daemon": "^1.1.0",
+    "deamon": "^1.0.0",
+    "loggly": "^1.0.8",
+    "node-env-file": "^0.1.7",
     "q": "^1.4.1",
-    "sqs-worker": "0.0.2"
+    "request": "^2.58.0",
+    "sqs-worker": "0.0.2",
+    "underscore": "^1.8.3"
   }
 }

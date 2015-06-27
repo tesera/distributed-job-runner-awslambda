@@ -1,26 +1,28 @@
 'use strict';
-var aws = require('aws-sdk');
-var QWorker = require('./lib/worker');
+var Job = require('./lib/job');
+require('node-env-file')('.env');
 
 exports.handler = function (event, context) {
-
-    var qWorker = new QWorker(event.queueUrl);
-
-    var actions = {
-        submitJob: function () {
-            return qWorker.submitJob(event);
+    var options = {
+        sqs: {
+            url: process.env.sqs_url
         },
-        getJobStatus: function (event) {
-            return qWorker.getExportSignedUrl(event.tasks);
+        ec2: {
+            KeyName: process.env.ec2_key_name,
+            SecurityGroupIds: [process.env.ec2_security_group_id],
+            SubnetId: process.env.ec2_subnet_id,
+            IamInstanceProfile: {
+                Name : process.env.ec2_iam_instance_profile
+            }
         },
-        cancelJob: function (event) {
-            return qWorker.getExportSignedUrl(event.tasks);
-        }
+        job: event.job
     };
 
-    actions[event.action](event)
+    var job = new Job(options);
+
+    job.start()
         .then(function (result) {
-            console.log(event.action + ' finished ');
+            console.log('job finished ');
             context.done(null, result);
         })
         .fail(context.done);
