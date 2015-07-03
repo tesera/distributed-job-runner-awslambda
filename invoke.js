@@ -13,7 +13,7 @@ var evt = {
         "runner": process.env.q2w_runner,
         "tasks": process.env.q2w_tasks,
         "workers": {
-            "count": 0,
+            "count": 1,
             "image": "ami-1ecae776",
             "type": "t2.micro"
         }
