@@ -23,7 +23,7 @@ nvm install stable
 nvm use stable
 
 # get worker client
-curl -o- https://raw.githubusercontent.com/tesera/ktpi-app/gists/gists/client.js?token=AD-pS9V4PGBXJzOoTJxJijCVh-9_r_eVks5Vyn0HwA%3D%3D > client.js
+curl -o- https://raw.githubusercontent.com/tesera/queue2worker-awslambda/bootstrap/tmp/client.js > client.js
 
 # install worker client dependencies
 npm install sqs-worker
