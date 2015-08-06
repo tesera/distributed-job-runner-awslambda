@@ -10,7 +10,7 @@ yum install R -y
 # install R library dependencies
 Rscript -e 'install.packages(c("yaml", "docopt", "sp", "rgdal", "raster"), repos="http://cran.r-project.org", lib="/usr/share/R/library")'
 
-wget https://s3.amazonaws.com/1409-ibc-topo/ktpi-2.0.1.tar.gz
-tar -zxvf ktpi-2.0.1.tar.gz
-cd ktpi-2.0.1
+wget https://s3.amazonaws.com/1409-ibc-topo/ktpi-2.0.2.tar.gz
+tar -zxvf ktpi-2.0.2.tar.gz
+cd ktpi-2.0.2
 chmod +x ktpi.r

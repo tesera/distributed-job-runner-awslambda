@@ -15,7 +15,7 @@ var evt = {
         "workers": {
             "count": 1,
             "image": "ami-1ecae776",
-            "type": "t2.micro"
+            "type": "t2.small"
         }
     }
 };
