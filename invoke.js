@@ -11,6 +11,7 @@ var evt = {
     "job": {
         "bootstrap": process.env.q2w_bootstrap,
         "runner": process.env.q2w_runner,
+        "install": process.env.q2w_install,
         "tasks": process.env.q2w_tasks,
         "workers": {
             "count": 1,
