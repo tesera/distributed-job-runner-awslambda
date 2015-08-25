@@ -11,11 +11,12 @@ var evt = {
     "job": {
         "bootstrap": process.env.q2w_bootstrap,
         "runner": process.env.q2w_runner,
+        "install": process.env.q2w_install,
         "tasks": process.env.q2w_tasks,
         "workers": {
             "count": 1,
             "image": "ami-1ecae776",
-            "type": "t2.micro"
+            "type": "t2.small"
         }
     }
 };

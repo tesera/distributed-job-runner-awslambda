@@ -29,7 +29,6 @@ function start(taskQueueUrl) {
 
     new SQSWorker(params, function worker(task, done) {
         // var selfDestruct = /^aws ec2 terminate-instances/.test(task);
-
         function log(tag, message){
             client.log({
                 tag: tag,
@@ -39,7 +38,6 @@ function start(taskQueueUrl) {
                 datetime: new Date()
             });
         }
-
         log('start', '');
 
         var work = spawn('bash', ['./runner.sh', task]);
