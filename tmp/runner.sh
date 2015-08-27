@@ -9,9 +9,9 @@ func=`echo $cmd | awk -F, '{print $1}'`
 feature=`echo $cmd | awk -F, '{print "./features/" $2 ".tif"}'`
 args=`echo $cmd | awk -F, '{print $4}'`
 
-bucket=1409-ibc-topo
-input_path=input/tiles500x500
-output_path=output/tiles500x500/queue2worker
+bucket=1604-tpi
+input_path=test1/input
+output_path=test1/output
 
 output_dir=./output
 
@@ -21,6 +21,6 @@ mkdir -p $output_dir
 
 eval "aws s3 cp s3://$bucket/$input_path/ . --exclude '*' $tiles --recursive"
 
-eval "./ktpi.r $func $feature ./dems $output_dir $args"
+eval "./ktpi.r $func $feature ./dems $output_dir $args &> ./output/$key.txt"
 
 aws s3 sync ./output s3://$bucket/$output_path
