@@ -43,3 +43,10 @@ q2w_runner=https://...
 q2w_tasks=https://...
 
 ````
+
+When zipping up to deploy as lambda function zip these:
+-.env
+-index.js
+-lib\
+-node_modules\
+-package.json
