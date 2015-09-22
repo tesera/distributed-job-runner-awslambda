@@ -9,18 +9,20 @@ var lambda = require('./index.js');
 require('node-env-file')('.env');
 
 var evt = {
-    action: 'submitJob',
-    job: {
-        bootstrap: process.env.q2w_bootstrap, // http url to dependency shell script
-        runner: process.env.q2w_runner, // http url toscript to process your tasks
-        tasks: process.env.q2w_tasks, // http url to csv runner args
-        workers: {
-            count: 3,
-            image: 'ami-1ecae776',
-            type: 't2.micro'
+    "action": "submitJob",
+    "job": {
+        "bootstrap": "http://ktpi-dev.elasticbeanstalk.com/bootstrap/bootstrap.sh"
+        "runner": "http://ktpi-dev.elasticbeanstalk.com/bootstrap/runner.sh"
+        "tasks": process.env.q2w_tasks, // http url to csv runner args
+        "install": "http://ktpi-dev.elasticbeanstalk.com/bootstrap/install-client.sh"
+        "workers": {
+            "count": "options.numWorkers",
+            "image": "ami-1ecae776",
+            "type": "t2.small"
         }
     }
 };
+
 
 var context = {
     done: function(err, data) {
