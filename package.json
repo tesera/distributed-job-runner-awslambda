@@ -1,21 +1,30 @@
 {
-  "name": "queue2worker-awslambda",
-  "version": "1.0.0",
+  "name": "distributed-job-runner-awslambda",
+  "version": "0.0.0",
   "description": "AWS lambda function to run tasks on EC2 instances",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/tesera/queue2worker-awslambda.git"
+    "url": "https://github.com/tesera/distributed-job-runner-awslambda.git"
   },
   "keywords": [
     "queue2worker",
     "aws",
-    "lambda"
+    "lambda",
+    "distributed job",
+    "job runner"
   ],
   "author": "Magda Kosior",
+  "contributors": [
+    {
+      "name": "Matt Zandstra",
+      "email": "matt@tesera.com"
+    }
+  ],
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.1.36",
