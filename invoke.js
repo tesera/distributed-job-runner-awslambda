@@ -9,10 +9,10 @@ require('node-env-file')('.env');
 var evt = {
     "action": "submitJob",
     "job": {
-        "bootstrap": process.env.q2w_bootstrap,
-        "runner": process.env.q2w_runner,
-        "install": process.env.q2w_install,
-        "tasks": process.env.q2w_tasks,
+        "bootstrap": process.env.BOOTSTRAP,
+        "runner": process.env.RUNNER,
+        "install": process.env.INSTALL,
+        "tasks": process.env.TASKS,
         "workers": {
             "count": 1,
             "image": "ami-1ecae776",
