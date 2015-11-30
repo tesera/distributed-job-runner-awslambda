@@ -8,6 +8,6 @@ In order to deploy, simply run `./deploy.sh`
 
 ## Files
 
-    `invoke.js` This is the point of first contact with AWS. Responsible for setting up env vars and starting the index.js file.
-    `index.js` This is responsible for creating a instance of the Job class.
+    `invoke.js` This file is used for testing the lambda task locally.
+    `index.js` This file defines the AWS Lambda function and is responsible for creating the job class.
     `lib/job.js` This is responsible for pulling tasks from AWS Lambda and kicking of an instance to run each one.
