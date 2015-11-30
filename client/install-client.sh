@@ -23,7 +23,7 @@ nvm install stable && nvm use stable
 [[ $? == 0 ]] && loggly "Installed node" || loggly "Error installing node"
 
 # get worker client
-curl -o- https://raw.githubusercontent.com/tesera/scripts/master/test-job/client.js?token=AAb0E__BkknFVRLNkNCiQSPJjMq9GZMXks5WZgwUwA%3D%3D > client.js
+aws s3 cp s3://tesera.svc.distributed-job-runner/client/client.sh client.js
 [[ $? == 0 ]] && loggly "Got client" || loggly "Error getting client"
 
 # install worker client dependencies
