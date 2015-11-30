@@ -14,3 +14,5 @@ aws lambda update-function-code \
  --region us-east-1
 
 rm function.zip
+
+aws s3 sync ./client s3://tesera.svc.distributed-job-runner/client
