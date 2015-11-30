@@ -15,19 +15,18 @@ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.29.0/install.sh | b
 [[ $? == 0 ]] && loggly "Installed nvm" || loggly "Error installing nvm"
 
 # invoke nvm
-export NVM_DIR="/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+source ~/.bashrc
 
 # install and use latest node version
-nvm install stable && nvm use stable
+nvm install 0 && nvm use 0
 [[ $? == 0 ]] && loggly "Installed node" || loggly "Error installing node"
 
 # get worker client
-aws s3 cp s3://tesera.svc.distributed-job-runner/client/client.sh client.js
+aws s3 cp s3://tesera.svc.distributed-job-runner/client/client.js client.js
 [[ $? == 0 ]] && loggly "Got client" || loggly "Error getting client"
 
 # install worker client dependencies
-npm install -g sqs-worker && npm install -g loggly && npm install -g daemon
+npm install sqs-worker && npm install loggly && npm install daemon
 [[ $? == 0 ]] && loggly "Installed client dependencies" || loggly "Error installing client dependencies"
 
 loggly "djr: instance $instance_id ready and starting work"
