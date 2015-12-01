@@ -3,7 +3,7 @@
 
 PWD=`pwd`
 
-zip -r function.zip package.json node_modules/* lib/* index.js environment/*
+zip -r function.zip package.json node_modules/* lib/* index.js environment/* environment/.env
 
 aws lambda update-function-code \
  --function-name distributed-job-runner \
