@@ -50,31 +50,32 @@ function start(taskQueueUrl) {
 
     new SQSWorker(params, function worker(task, done) {
 
-        function log(tag, message){
-            winston.log('info', {
+        function log(tag, message, level){
+            winston.log(level||'info', {
                 tag: tag,
-                worker: instanceId,
+                instance: instanceId,
                 task: task,
-                payload: 'client: '+message.toString(),
+                queue: taskQueueUrl,
+                message: 'client: '+message.toString(),
                 datetime: new Date()
             });
         }
 
-        log('client: start', '');
+        log('', 'client: starting task');
 
         var work = spawn('bash', ['./runner.sh', task]);
         clearTimer();
 
         work.stdout.on('data', function (data) {
-            log('stdout', 'client: '+data);
+            log('stdout', data, 'debug');
         });
 
         work.stderr.on('data', function (err) {
-            log('stderr', 'client: '+err);
+            log('stderr', err, 'debug');
         });
 
         work.on('close', function (code) {
-            log('done', 'client: Job finished on '+instanceId+' with status '+code);
+            log('done', 'Job finished on '+instanceId+' with status '+code, 'debug');
             startTimer();
             done(null, !code);
         });
