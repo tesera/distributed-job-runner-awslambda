@@ -2,27 +2,35 @@
 'use strict';
 var SQSWorker = require('sqs-worker');
 var spawn = require('child_process').spawn;
-var loggly = require('loggly');
+var winston = require('winston');
+require('winston-loggly');
 
-require('daemon')();
 var instanceId = process.env.INSTANCE_ID || 'localhost';
 var taskQueueUrl = process.argv[2];
 
-var client = loggly.createClient({
+ winston.add(winston.transports.Loggly, {
     token: '3c69f1b6-85f4-4940-b1f2-a00a6a1999b3',
     subdomain: 'tesera',
     tags: ['djr','djr-instance','djr-instance-'+instanceId],
     json: true
 });
 
+winston.log('info', 'client: started with PID: '+process.pid);
+require('daemon')();
+winston.log('info', 'client: forked with PID: '+process.pid);
+
 function shutdown() {
-    client.log('djr ' + instanceId + ' is shutting down');
-    spawn('bash', ['shutdown -h now']);
+    winston.log('info', 'client: djr ' + instanceId + ' is shutting down');
+    if(process.env.NODE_ENV !== 'development') {
+        spawn('bash', ['shutdown -h now']);
+    } else {
+        winston.log('info', 'client: not shutting down since this is development');
+    }
 }
 
 var timeout;
 function startTimer() {
-    timeout = setTimeout(30000, shutdown);
+    timeout = setTimeout(shutdown, 30000);
 }
 
 function clearTimer() {
@@ -36,41 +44,41 @@ function start(taskQueueUrl) {
         region: 'us-east-1'
     };
 
-    client.log('djr ' + instanceId + ' started');
+    winston.log('info', 'client: ' + instanceId + ' started');
 
     new SQSWorker(params, function worker(task, done) {
 
         function log(tag, message){
-            client.log({
+            winston.log('info', {
                 tag: tag,
                 worker: instanceId,
                 task: task,
-                payload: message.toString(),
+                payload: 'client: '+message.toString(),
                 datetime: new Date()
             });
         }
 
-        log('start', '');
+        log('client: start', '');
 
         var work = spawn('bash', ['./runner.sh', task]);
         clearTimer();
 
         work.stdout.on('data', function (data) {
-            log('stdout', data);
+            log('stdout', 'client: '+data);
         });
 
         work.stderr.on('data', function (err) {
-            log('stderr', err);
+            log('stderr', 'client: '+err);
         });
 
         work.on('close', function (code) {
-            log('done', 'Job finished on '+instanceId+' with status '+code);
+            log('done', 'client: Job finished on '+instanceId+' with status '+code);
             startTimer();
             done(null, !code);
         });
     });
 }
 
-client.log('djr ' + instanceId + ' listening on task queue ' + taskQueueUrl);
+winston.log('info', 'client: ' + instanceId + ' listening on task queue ' + taskQueueUrl);
 
 start(taskQueueUrl);

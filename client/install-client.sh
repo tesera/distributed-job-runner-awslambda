@@ -12,31 +12,32 @@ loggly() {
 	curl -H "content-type:text/plain" -d "$MSG" "http://logs-01.loggly.com/inputs/$LOGGLY_API_KEY/tag/$LOGGLY_TAGS"
 }
 
-loggly "djr: installing worker client on $INSTANCE_ID"
+loggly "install-client: installing worker client on $INSTANCE_ID"
 
 # install nvm
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.29.0/install.sh | bash
-[[ $? == 0 ]] && loggly "Installed nvm" || loggly "Error installing nvm"
+[[ $? == 0 ]] && loggly "install-client: Installed nvm" || loggly "install-client: Error installing nvm"
 
 # invoke nvm
 source ~/.bashrc
 
 # install and use latest node version
 nvm install 0 && nvm use 0
-[[ $? == 0 ]] && loggly "Installed node" || loggly "Error installing node"
+[[ $? == 0 ]] && loggly "install-client: Installed node" || loggly "install-client: Error installing node"
 
 # get worker client
 aws s3 cp s3://tesera.svc.distributed-job-runner/client/client.js client.js
-[[ $? == 0 ]] && loggly "Got client" || loggly "Error getting client"
+[[ $? == 0 ]] && loggly "install-client: Got client" || loggly "install-client: Error getting client"
 
 # install worker client dependencies
-npm install sqs-worker && npm install loggly && npm install daemon
-[[ $? == 0 ]] && loggly "Installed client dependencies" || loggly "Error installing client dependencies"
+npm install winston winston-loggly daemon sqs-worker
+[[ $? == 0 ]] && loggly "install-client: Installed client dependencies" || loggly "install-client: Error installing client dependencies"
 
-loggly "djr: instance $INSTANCE_ID ready and starting work"
+loggly "install-client: instance $INSTANCE_ID ready and starting work"
 
 # start worker client deamon with task SQS URL
 chmod +x client.js
-node ./client.js https://sqs.us-east-1.amazonaws.com/674223647607/q2worker
+./client.js https://sqs.us-east-1.amazonaws.com/674223647607/q2worker
+PID=$!
 
-loggly "djr: instance $INSTANCE_ID working"
+loggly "install-client: instance $INSTANCE_ID pid: $PID"
