@@ -1,7 +1,4 @@
-'use strict'
+'use strict';
 
-require('node-env-file')('.env');
-
-if(process.env.NODE_ENV === 'development') {
-    require('node-env-file')('dev.env');
-}
+require('node-env-file')('environment/.env');
+require('node-env-file')('environment/'+process.env.NODE_ENV+'.env');
