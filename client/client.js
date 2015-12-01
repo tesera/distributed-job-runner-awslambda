@@ -22,7 +22,7 @@ winston.log('info', 'client: forked with PID: '+process.pid);
 function shutdown() {
     winston.log('info', 'client: djr ' + instanceId + ' is shutting down');
     if(process.env.NODE_ENV !== 'development') {
-        var shutoff = spawn('sudo ', ['shutdown','-h','now']);
+        var shutoff = spawn('sudo', ['shutdown','-h','now']);
         shutoff.on('data', function(data) { winston.log('info', 'client: shutdown: '+data); });
         shutoff.on('close', function() { winston.log('info', 'client: shutdown ok'); });
     } else {
