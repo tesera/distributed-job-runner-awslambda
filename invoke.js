@@ -4,7 +4,7 @@
 
 'use strict';
 var lambda = require('./index.js');
-require('node-env-file')('.env');
+require('./environment');
 
 var evt = {
     "action": "submitJob",
