@@ -16,6 +16,7 @@ var client = loggly.createClient({
 });
 
 function shutdown() {
+    client.log('djr ' + instanceId + ' is shutting down');
     spawn('bash', ['shutdown -h now']);
 }
 
@@ -23,6 +24,7 @@ var timeout;
 function startTimer() {
     timeout = setTimeout(30000, shutdown);
 }
+
 function clearTimer() {
     clearTimeout(timeout);
 }
