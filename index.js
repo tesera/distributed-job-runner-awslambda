@@ -1,6 +1,6 @@
 'use strict';
 var Job = require('./lib/job');
-require('node-env-file')('.env');
+require('./environment');
 
 exports.handler = function (event, context) {
     var options = {
