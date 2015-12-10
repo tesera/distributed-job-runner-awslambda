@@ -13,7 +13,8 @@ describe('Job', function() {
             'bootstrap': 'bootstrap-value',
             'workers': 'workers-value',
             'runner': 'runner-value',
-            'tasks': 'tasks-value'
+            'tasks': 'tasks-value',
+            'install': 'install-value'
         }
     });
 
@@ -26,7 +27,10 @@ describe('Job', function() {
             expect(subject).to.have.property('workers','workers-value');
             expect(subject).to.have.property('runner','runner-value');
             expect(subject).to.have.property('tasks','tasks-value');
-            expect(subject).to.have.property('workerClient');
+        });
+
+        it('should build a workerClient value', function() {
+            'su ec2-user -c "cd; aws s3 cp install-value - | bash"';
         });
     });
 });
