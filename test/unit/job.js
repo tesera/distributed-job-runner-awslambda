@@ -2,6 +2,7 @@
 
 require('../test_helper');
 var expect = require('chai').expect;
+var assert = require('assert');
 var Job = require('../../lib/job');
 var nock = require('nock');
 
@@ -38,13 +39,23 @@ describe('Job', function() {
     describe('#_prep()', function() {
 
         var s3 = nock('http://s3.domain/')
-            .get('/bootstrap-path').once().reply(200, 'Hello World')
-            .get('/runner-path').once().reply(200, 'Hello World')
-            .get('/tasks-path').once().reply(200, 'Hello World');
+            .get('/bootstrap-path').once().reply(200, 'bootstrap-code')
+            .get('/tasks-path').once().reply(200, 'tasks-data');
 
-        it('should request the resources specified', function() {
-            subject._prep().then(s3.done);
+        var expected_runner = 'su ec2-user -c "cd; curl -o- http://s3.domain/runner-path > runner.sh"';
+        var expected_bootstrap = ['bootstrap-code', expected_runner, subject.workerClient].join('\n');
+        var expected_tasks = 'tasks-data';
+
+        it('should update the runner, bootstrap and tasks with data from the http path', function(done) {
+            subject._prep()
+                .then(function() {
+                    s3.done();
+                    expect(subject.bootstrap).to.equal(expected_bootstrap);
+                    expect(subject).to.have.property('runner', expected_runner);
+                    expect(subject).to.have.property('tasks', expected_tasks);
+                    done();
+                })
+                .catch(done);
         });
-
     });
 });
