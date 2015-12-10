@@ -21,6 +21,8 @@ describe('Job', function() {
 
     describe('#contructor()', function() {
 
+        var expected_workerClient = 'su ec2-user -c "cd; aws s3 cp http://s3.domain/install-path - | bash"';
+
         it('should copy in the options', function(){
             expect(subject).to.have.property('ec2','ec2-value');
             expect(subject).to.have.property('sqs','sqs-value');
@@ -30,7 +32,7 @@ describe('Job', function() {
         });
 
         it('should build a workerClient value', function() {
-            'su ec2-user -c "cd; aws s3 cp http://s3.domain/install-path - | bash"';
+            expect(subject).to.have.property('workerClient', expected_workerClient);
         });
     });
 
@@ -47,8 +49,8 @@ describe('Job', function() {
             subject._prep()
                 .then(function() {
                     s3.done();
-                    expect(subject).to.have.property('bootstrap', expected_bootstrap);
                     expect(subject).to.have.property('runner', expected_runner);
+                    expect(subject).to.have.property('bootstrap', expected_bootstrap);
                     expect(subject).to.have.property('tasks', expected_tasks);
                     done();
                 })
