@@ -9,13 +9,12 @@ require('./environment');
 var evt = {
     "action": "submitJob",
     "job": {
-        "bootstrap": process.env.BOOTSTRAP,
+        "image": process.env.IMAGE,
         "runner": process.env.RUNNER,
         "install": process.env.INSTALL,
         "tasks": process.env.TASKS,
         "workers": {
             "count": 1,
-            "image": "ami-1ecae776",
             "type": "t2.small"
         }
     }
